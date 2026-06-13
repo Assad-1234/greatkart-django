@@ -11,6 +11,9 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from carts.views import _cart_id
+from carts.models import Cart, CartItem 
+import requests
 # Create your views here.
 @csrf_exempt
 def register(request):
@@ -47,20 +50,84 @@ def register(request):
         'form': form,
     }
     return render(request,'accounts/register.html', context)
-
+@csrf_exempt
 def login(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
         user = auth.authenticate(email=email, password=password)
+        
         if user is not None:
+            try:
+                # Get session cart
+                cart = Cart.objects.get(cart_id=_cart_id(request))
+                is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
+                
+                if is_cart_item_exists:
+                    # Get session cart items
+                    session_cart_items = CartItem.objects.filter(cart=cart)
+                    
+                    # Get user's existing cart items
+                    user_cart_items = CartItem.objects.filter(user=user)
+                    
+                    # Create lists for user's existing variations and IDs
+                    ex_var_list = []
+                    id_list = []
+                    
+                    for item in user_cart_items:
+                        existing_variation = list(item.variations.all())
+                        ex_var_list.append(existing_variation)
+                        id_list.append(item.id)
+                    
+                    # Process each session cart item
+                    for session_item in session_cart_items:
+                        # Get variations of session cart item
+                        product_variation = list(session_item.variations.all())
+                        
+                        # Check if this variation exists in user's cart
+                        if product_variation in ex_var_list:
+                            # Variation exists - update quantity
+                            index = ex_var_list.index(product_variation)
+                            item_id = id_list[index]
+                            existing_item = CartItem.objects.get(id=item_id)
+                            
+                            # Add session item quantity to existing item
+                            existing_item.quantity += session_item.quantity
+                            existing_item.save()
+                            
+                            # Delete the session item
+                            session_item.delete()
+                        else:
+                            # Variation doesn't exist - assign to user
+                            session_item.user = user
+                            session_item.cart = None
+                            session_item.save()
+                    
+                    # Delete the empty session cart
+                    cart.delete()
+                    
+            except Cart.DoesNotExist:
+                pass
+            except Exception as e:
+                print(f"Error in login merge: {e}")
+            
+            # Login the user
             auth.login(request, user)
             messages.success(request, 'You are now logged in!')
-            return redirect('dashboard')
+            url = request.META.get('HTTP_REFERER')
+            try:
+                query = requests.utils.urlparse(url).query
+                # next=/cart/checkout/
+                params = dict(x.split('=') for x in query.split('&'))
+                if 'next' in params:
+                    nextPage = params['next']
+                    return redirect(nextPage)
+            except:
+                return redirect('dashboard')
         else:
             messages.error(request, 'Invalid login credentials')
             return redirect('login')
-    return render(request,'accounts/login.html')
+    return render(request, 'accounts/login.html')
 @login_required(login_url='login')
 def logout(request):
     auth.logout(request)
