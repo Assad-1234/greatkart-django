@@ -1,0 +1,40 @@
+{% autoescape off %}
+Hi {{ user.first_name }},
+
+Thank you for shopping with GreatKart! Your order has been received and is being processed.
+
+Order Details:
+------------------------------------------------
+Order Number: {{ order.order_number }}
+Transaction ID: {{ payment.payment_id }}
+Order Date: {{ order.created_at }}
+Payment Method: {{ payment.payment_method }}
+Order Status: {{ order.status }}
+Total Amount: ${{ order.order_total }}
+------------------------------------------------
+
+Shipping Address:
+------------------------------------------------
+{{ order.first_name }} {{ order.last_name }}
+{{ order.address_line_1 }}
+{% if order.address_line_2 %}{{ order.address_line_2 }}{% endif %}
+{{ order.city }}, {{ order.state }}
+{{ order.country }}
+Phone: {{ order.phone }}
+Email: {{ order.email }}
+------------------------------------------------
+
+Note: You will pay cash when you receive the product.
+
+You can track your order status at:
+http://{{ domain }}{% url 'order_detail' order.order_number %}
+
+Thank you for choosing GreatKart!
+
+If you have any questions, please contact us at info@pixsellz.io
+
+If you didn't place this order, please ignore this email.
+
+Best regards,
+GreatKart Team
+{% endautoescape %}

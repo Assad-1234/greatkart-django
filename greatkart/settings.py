@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts',
     'store',
     'carts',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -110,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Karachi'
 
 USE_I18N = True
 
@@ -139,3 +140,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'work.ahmedrazaofficial@gmail.com'
 EMAIL_HOST_PASSWORD = 'ljbp fluq kdcd xkxq'
 EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'GreatKart <work.ahmedrazaofficial@gmail.com>'
