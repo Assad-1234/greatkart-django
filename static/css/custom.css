@@ -1,19 +1,19 @@
 /* Hide Radio button */
-.rate > input{
+.rate>input {
     display: none;
 }
 
-.rate{
+.rate {
     display: inline-block;
     border: 0;
 }
 
-.rate > label{
+.rate>label {
     float: right;
 }
 
 /* showing the stars */
-.rate > label::before{
+.rate>label::before {
     display: inline-block;
     font-size: 1.1rem;
     font-family: FontAwesome;
@@ -22,3 +22,4 @@
     padding: 0.3rem .2rem;
     cursor: pointer;
 }
+

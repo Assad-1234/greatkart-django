@@ -225,14 +225,14 @@ def order_complete(request ,order_number):
         messages.error(request, f'Order not found: {str(e)}')
         return redirect('home')
 
-@login_required(login_url='login')
-def order_detail(request, order_number):
-    """Display detailed information for a specific order"""
-    order = get_object_or_404(Order, order_number=order_number, user=request.user)
-    order_products = OrderProduct.objects.filter(order=order)
+# @login_required(login_url='login')
+# def order_detail(request, order_number):
+#     """Display detailed information for a specific order"""
+#     order = get_object_or_404(Order, order_number=order_number, user=request.user)
+#     order_products = OrderProduct.objects.filter(order=order)
     
-    context = {
-        'order': order,
-        'order_products': order_products,
-    }
-    return render(request, 'orders/order_detail.html', context)
+#     context = {
+#         'order': order,
+#         'order_products': order_products,
+#     }
+#     return render(request, 'orders/order_detail.html', context)
