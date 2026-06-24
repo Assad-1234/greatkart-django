@@ -77,3 +77,12 @@ class OrderProduct(models.Model):
     
     def __str__(self):
         return self.product.product_name
+    
+
+class Tax(models.Model):
+    tax_name = models.CharField(max_length=100, default='Sales Tax')
+    tax_percentage = models.FloatField(default=2.0)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.tax_name} - {self.tax_percentage}%"

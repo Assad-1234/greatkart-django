@@ -10,6 +10,9 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.contrib import messages
 from store.models import Product
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import Tax
 # Create your views here.
 @login_required(login_url='login')
 def payments(request, order_number):
@@ -74,6 +77,49 @@ def payments(request, order_number):
                 
                 # Clear the cart
                 cart_items.delete()
+
+                order_products = OrderProduct.objects.filter(order=order)
+
+                products_list = ""
+
+                for item in order_products:
+
+                    variations = ""
+
+                    for variation in item.variations.all():
+                        variations += f"{variation.variation_category}: {variation.variation_value}, "
+
+                    products_list += f"""
+                Product: {item.product.product_name}
+                Variations: {variations}
+                Quantity: {item.quantity}
+                Price: Rs{item.product_price}
+
+                """
+
+                send_mail(
+                    subject=f'New Order #{order.order_number}',
+                    message=f'''
+                New Order Received!
+
+                Order Number: {order.order_number}
+                Customer: {order.full_name()}
+                Phone: {order.phone}
+                Email: {order.email}
+
+                Products Ordered:
+                {products_list}
+
+                Tax: Rs{order.tax}
+                Grand Total: Rs{order.order_total}
+                ''',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[settings.ADMIN_EMAIL],
+                    fail_silently=False,
+                )
+
+                # Clear the cart
+                cart_items.delete()
                 
                 # ========== SEND ORDER RECEIVED EMAIL TO CUSTOMER ==========
                 try:
@@ -131,9 +177,17 @@ def place_order(request, total=0, quantity=0):
     tax = 0
 
     for cart_item in cart_items:
-        total  += (cart_item.product.price * cart_item.quantity)
+        total += (cart_item.product.price * cart_item.quantity)
         quantity += cart_item.quantity
-    tax = (2*total)/100
+
+        product_total = cart_item.product.price * cart_item.quantity
+
+        product_tax = (
+            product_total * cart_item.product.tax_percentage
+        ) / 100
+
+        tax += product_tax
+
     grand_total = total + tax
     
     if request.method == 'POST':
@@ -225,14 +279,4 @@ def order_complete(request ,order_number):
         messages.error(request, f'Order not found: {str(e)}')
         return redirect('home')
 
-# @login_required(login_url='login')
-# def order_detail(request, order_number):
-#     """Display detailed information for a specific order"""
-#     order = get_object_or_404(Order, order_number=order_number, user=request.user)
-#     order_products = OrderProduct.objects.filter(order=order)
-    
-#     context = {
-#         'order': order,
-#         'order_products': order_products,
-#     }
-#     return render(request, 'orders/order_detail.html', context)
+
