@@ -1,28 +1,28 @@
-﻿{
-  "builds": [
-    {
-      "src": "greatkart/wsgi.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "15mb"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/"
-    },
-    {
-      "src": "/media/(.*)",
-      "dest": "/media/"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "greatkart/wsgi.py"
-    }
-  ],
-  "env": {
-    "DJANGO_SETTINGS_MODULE": "greatkart.settings"
-  }
-}
+{ 
+  "builds": [ 
+    { 
+      "src": "greatkart/wsgi.py", 
+      "use": "@vercel/python", 
+      "config": { 
+        "maxLambdaSize": "15mb" 
+      } 
+    } 
+  ], 
+  "routes": [ 
+    { 
+      "src": "/static/(.*)", 
+      "dest": "/static/" 
+    }, 
+    { 
+      "src": "/media/(.*)", 
+      "dest": "/media/" 
+    }, 
+    { 
+      "src": "/(.*)", 
+      "dest": "greatkart/wsgi.py" 
+    } 
+  ], 
+  "env": { 
+    "DJANGO_SETTINGS_MODULE": "greatkart.settings" 
+  } 
+} 
