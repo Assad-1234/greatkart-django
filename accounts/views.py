@@ -153,7 +153,9 @@ def activate(request,uidb64, token):
 def dashboard(request):
     orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True)
     orders_count = orders.count()
-    userprofile = UserProfile.objects.get(user_id=request.user.id)
+    userprofile, created = UserProfile.objects.get_or_create(
+    user=request.user
+)
     context = {
         'orders_count': orders_count,
         'userprofile': userprofile,
@@ -282,9 +284,38 @@ def order_detail(request, order_id):
     for item in order_detail:
         subtotal += item.product_price * item.quantity
     
+    # ===== GET TRANSACTION ID =====
+    transaction_id = None
+    try:
+        # Try to get from order payment
+        if order.payment:
+            transaction_id = order.payment.payment_id
+        # If not, try to get from order products
+        elif order_detail and order_detail.first():
+            if order_detail.first().payment:
+                transaction_id = order_detail.first().payment.payment_id
+    except:
+        pass
+    
+    # If still no transaction ID, generate a fallback
+    if not transaction_id:
+        transaction_id = f"COD_{order.order_number}"
+    
+    # ===== GET PAYMENT STATUS =====
+    payment_status = None
+    try:
+        if order.payment:
+            payment_status = order.payment.status
+        elif order_detail and order_detail.first() and order_detail.first().payment:
+            payment_status = order_detail.first().payment.status
+    except:
+        payment_status = "Pending"
+    
     context = {
         'order_detail': order_detail,
         'order': order,
         'subtotal': subtotal,
+        'transaction_id': transaction_id,  # Pass transaction ID to template
+        'payment_status': payment_status,  # Pass payment status
     }
     return render(request, 'accounts/order_detail.html', context)

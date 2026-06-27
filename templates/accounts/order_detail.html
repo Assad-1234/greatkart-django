@@ -2,135 +2,569 @@
 {% load static %}
 {% block content %}
 
-  <div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;">
+<style>
+/* ============================================================
+   FIX NAVBAR OVERLAP - PRIORITY
+   ============================================================ */
+.section-content {
+    margin-top: 100px !important;
+    padding-top: 30px !important;
+    min-height: 100vh !important;
+}
+
+body {
+    padding-top: 0 !important;
+}
+
+/* ============================================================
+   INVOICE CONTAINER
+   ============================================================ */
+.invoice-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================
+   INVOICE PANEL
+   ============================================================ */
+.panel {
+    background: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.panel-body {
+    padding: 30px;
+}
+
+/* ============================================================
+   INVOICE LOGO
+   ============================================================ */
+.invoice-logo img {
+    max-height: 40px !important;
+    width: auto !important;
+}
+
+/* ============================================================
+   INVOICE FROM (Billing Address)
+   ============================================================ */
+.invoice-from ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.invoice-from ul li {
+    padding: 3px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.invoice-from ul li strong {
+    font-size: 16px;
+    color: #333;
+}
+
+/* ============================================================
+   INVOICE DETAILS
+   ============================================================ */
+.invoice-details {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.invoice-details ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.invoice-details ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.invoice-details ul li:last-child {
+    border-bottom: none;
+}
+
+.invoice-details ul li strong {
+    color: #333;
+    font-weight: 600;
+}
+
+.invoice-details ul li .text-warning {
+    color: #ffc107;
+    font-weight: 600;
+}
+
+/* ============================================================
+   INVOICE ITEMS TABLE
+   ============================================================ */
+.invoice-items {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 20px 0;
+}
+
+.invoice-items .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 500px;
+    margin-bottom: 0;
+}
+
+.invoice-items .table thead th {
+    background: #007bff;
+    color: white;
+    padding: 12px 15px;
+    text-align: center;
+    font-weight: 600;
+    border: none;
+}
+
+.invoice-items .table tbody td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eaeaea;
+    vertical-align: middle;
+}
+
+.invoice-items .table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.invoice-items .table tfoot td {
+    padding: 12px 15px;
+    border-top: 2px solid #333;
+    font-weight: 600;
+}
+
+.invoice-items .table tfoot tr:last-child td {
+    font-size: 1.1rem;
+    color: #28a745;
+}
+
+/* ============================================================
+   BADGE
+   ============================================================ */
+.badge-secondary {
+    background: #6c757d;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    margin: 2px;
+    display: inline-block;
+}
+
+/* ============================================================
+   ALERT / COD INSTRUCTIONS
+   ============================================================ */
+.alert-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.alert-warning i {
+    margin-right: 10px;
+}
+
+/* ============================================================
+   INVOICE FOOTER
+   ============================================================ */
+.invoice-footer {
+    text-align: center;
+    padding: 20px 0 0;
+    border-top: 2px solid #eaeaea;
+    margin-top: 20px;
+    color: #666;
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
+
+/* ===== EXTRA SMALL (Phones, < 576px) ===== */
+@media (max-width: 575.98px) {
+    .section-content {
+        margin-top: 60px !important;
+        padding-top: 10px !important;
+    }
+    
+    .invoice-wrapper {
+        padding: 10px !important;
+        margin: 5px !important;
+        border-radius: 4px !important;
+    }
+
+    .panel-body {
+        padding: 15px !important;
+    }
+
+    .row {
+        flex-direction: column !important;
+    }
+
+    .col-lg-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+
+    .col-lg-12 {
+        padding: 0 !important;
+    }
+
+    .invoice-logo {
+        text-align: center !important;
+        margin-bottom: 15px !important;
+    }
+
+    .invoice-logo img {
+        max-height: 30px !important;
+    }
+
+    .invoice-from {
+        text-align: center !important;
+    }
+
+    .invoice-from ul {
+        text-align: center !important;
+    }
+
+    .invoice-from ul li {
+        font-size: 13px !important;
+        padding: 2px 0 !important;
+    }
+
+    .invoice-from ul li strong {
+        font-size: 14px !important;
+    }
+
+    .invoice-details {
+        padding: 12px !important;
+        margin: 10px 0 !important;
+    }
+
+    .invoice-details ul li {
+        font-size: 12px !important;
+        padding: 6px 0 !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+
+    .invoice-details ul li strong {
+        width: 100% !important;
+        margin-bottom: 2px !important;
+    }
+
+    .invoice-details ul li span {
+        width: 100% !important;
+        padding-left: 10px !important;
+    }
+
+    .invoice-items .table {
+        font-size: 11px !important;
+        min-width: 320px !important;
+    }
+
+    .invoice-items .table thead th {
+        font-size: 10px !important;
+        padding: 6px 8px !important;
+    }
+
+    .invoice-items .table tbody td {
+        font-size: 11px !important;
+        padding: 6px 8px !important;
+    }
+
+    .invoice-items .table tfoot td {
+        font-size: 11px !important;
+        padding: 8px 10px !important;
+    }
+
+    .badge-secondary {
+        font-size: 9px !important;
+        padding: 2px 6px !important;
+    }
+
+    .alert-warning {
+        padding: 10px 12px !important;
+        font-size: 12px !important;
+        margin: 10px 0 !important;
+    }
+
+    .invoice-footer {
+        font-size: 12px !important;
+        padding: 15px 0 0 !important;
+    }
+
+    .text-right {
+        text-align: center !important;
+    }
+}
+
+/* ===== SMALL (Tablets, 576px - 768px) ===== */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .section-content {
+        margin-top: 70px !important;
+        padding-top: 15px !important;
+    }
+    
+    .invoice-wrapper {
+        padding: 15px !important;
+        margin: 10px !important;
+    }
+
+    .panel-body {
+        padding: 20px !important;
+    }
+
+    .col-lg-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    .invoice-logo {
+        text-align: center !important;
+        margin-bottom: 15px !important;
+    }
+
+    .invoice-from {
+        text-align: center !important;
+    }
+
+    .invoice-items .table {
+        font-size: 12px !important;
+        min-width: 400px !important;
+    }
+}
+
+/* ===== MEDIUM (Tablets, 768px - 992px) ===== */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .section-content {
+        margin-top: 80px !important;
+        padding-top: 20px !important;
+    }
+    
+    .invoice-wrapper {
+        padding: 20px !important;
+        margin: 20px !important;
+    }
+
+    .panel-body {
+        padding: 25px !important;
+    }
+
+    .col-lg-6 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+
+    .invoice-items .table {
+        font-size: 13px !important;
+    }
+}
+
+/* ===== LARGE (Desktops, > 992px) ===== */
+@media (min-width: 992px) {
+    .section-content {
+        margin-top: 100px !important;
+        padding-top: 30px !important;
+    }
+    
+    .invoice-wrapper {
+        padding: 30px !important;
+        margin: 30px auto !important;
+    }
+
+    .col-lg-6 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+}
+
+/* ============================================================
+   PRINT STYLES
+   ============================================================ */
+@media print {
+    .navbar,
+    footer,
+    .btn,
+    .no-print {
+        display: none !important;
+    }
+
+    .section-content {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    .invoice-wrapper {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+        margin: 0 !important;
+        padding: 20px !important;
+    }
+
+    .invoice-items .table thead th {
+        background: #333 !important;
+        color: white !important;
+    }
+
+    .invoice-details {
+        background: #f5f5f5 !important;
+    }
+}
+</style>
+
+<!-- ============================================================
+   INVOICE CONTENT
+   ============================================================ -->
+<div class="invoice-wrapper">
     <div class="row invoice row-printable">
-      <div class="col-md-12">
-        <!-- col-lg-12 start here -->
-        <div class="panel panel-default plain" id="dash_0">
-          <!-- Start .panel -->
-          <div class="panel-body p30">
-            <div class="row">
-              <!-- Start .row -->
-              <div class="col-lg-6">
-                <!-- col-lg-6 start here -->
-                <div class="invoice-logo">
-                  <img src="{% static '/images/logo.png' %}" alt="Invoice logo" style="max-height: 40px;" />
-                </div>
-              </div>
-              <!-- col-lg-6 end here -->
-              <div class="col-lg-6">
-                <!-- col-lg-6 start here -->
-                <div class="invoice-from">
-                  <ul class="list-unstyled text-right">
-                    <li>
-                      <strong>Invoiced To</strong>
-                    </li>
-                    <li>{{ order.full_name }}</li>
-                    <li>{{ order.full_address }}</li>
-                    <li>{{ order.city }}, {{ order.state }}</li>
-                    <li>{{ order.country }}</li>
-                  </ul>
-                </div>
-              </div>
-              <!-- col-lg-6 end here -->
-              <div class="col-lg-12">
-                <!-- col-lg-12 start here -->
-                <div class="invoice-details mt25">
-                  <div class="well">
-                    <ul class="list-unstyled mb0">
-                      <li>
-                        <strong>Order</strong> #{{order.order_number}}
-                      </li>
-                      <li>
-                        <strong>Transaction</strong> {{order_detail.payment.payment_id}}
-                      </li>
-                      <li>
-                        <strong>Order Date:</strong> {{ order.created_at }}
-                      </li>
-                      <li>
-                        <strong>Status:</strong> 
-                        {% if order.payment_method == 'COD' %}
-                          <span class="text-warning">Pending (Cash on Delivery)</span>
-                        {% else %}
-                          {{ order_detail.payment.status }}
-                        {% endif %}
-                      </li>
-                      <li>
-                        <strong>Payment Method:</strong> {{ order.payment_method }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+        <div class="col-md-12">
+            <div class="panel panel-default plain" id="dash_0">
+                <div class="panel-body p30">
+                    <div class="row">
+                        <!-- Logo -->
+                        <div class="col-lg-6">
+                            <div class="invoice-logo">
+                                <img src="{% static '/images/logo.png' %}" alt="Invoice logo" style="max-height: 40px;" />
+                            </div>
+                        </div>
 
-                <div class="invoice-items">
-                  <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th class="per70 text-center">Description</th>
-                          <th class="per5 text-center">Qty</th>
-                          <th class="per25 text-center">Total</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for item in order_detail %}
-                        <tr>
-                          <td>
-                            {{ item.product.product_name }}
-                            {% if item.variations.all %}
-                              <br>
-                              <small>
-                              {% for variation in item.variations.all %}
-                                <span class="badge badge-secondary">{{ variation.variation_category }}: {{ variation.variation_value }}</span>
-                              {% endfor %}
-                              </small>
+                        <!-- Invoiced To -->
+                        <div class="col-lg-6">
+                            <div class="invoice-from">
+                                <ul class="list-unstyled text-right">
+                                    <li>
+                                        <strong>Invoiced To</strong>
+                                    </li>
+                                    <li>{{ order.full_name }}</li>
+                                    <li>{{ order.full_address }}</li>
+                                    <li>{{ order.city }}, {{ order.state }}</li>
+                                    <li>{{ order.country }}</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Order Details -->
+                        <div class="col-lg-12">
+                            <div class="invoice-details mt25">
+                                <div class="well">
+                                    <ul class="list-unstyled mb0">
+                                        <li>
+                                            <strong>Order</strong> #{{ order.order_number }}
+                                        </li>
+                                        <li>
+                                            <strong>Transaction</strong>
+                                            {% if transaction_id %}
+                                                {{ transaction_id }}
+                                            {% else %}
+                                                N/A
+                                            {% endif %}
+                                        </li>
+                                        <li>
+                                            <strong>Order Date:</strong> {{ order.created_at|date:'F j, Y, g:i a' }}
+                                        </li>
+                                        <li>
+                                            <strong>Status:</strong>
+                                            {% if order.payment_method == 'COD' %}
+                                                <span class="text-warning">Pending (Cash on Delivery)</span>
+                                            {% else %}
+                                                {{ payment_status|default:'Pending' }}
+                                            {% endif %}
+                                        </li>
+                                        <li>
+                                            <strong>Payment Method:</strong> {{ order.payment_method|default:'COD' }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Order Items Table -->
+                            <div class="invoice-items">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="per70 text-center">Description</th>
+                                                <th class="per5 text-center">Qty</th>
+                                                <th class="per25 text-center">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in order_detail %}
+                                                <tr>
+                                                    <td>
+                                                        {{ item.product.product_name }}
+                                                        {% if item.variations.all %}
+                                                            <br />
+                                                            <small>
+                                                                {% for variation in item.variations.all %}
+                                                                    <span class="badge badge-secondary">{{ variation.variation_category }}: {{ variation.variation_value }}</span>
+                                                                {% endfor %}
+                                                            </small>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="text-center">{{ item.quantity }}</td>
+                                                    <td class="text-center">₨{{ item.product_price|floatformat:2 }} PKR</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="2" class="text-right">Sub Total:</th>
+                                                <th class="text-center">₨{{ subtotal|floatformat:2 }} PKR</th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2" class="text-right">Tax:</th>
+                                                <th class="text-center">₨{{ order.tax|floatformat:2 }} PKR</th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2" class="text-right">Grand Total:</th>
+                                                <th class="text-center">
+                                                    <strong>₨{{ order.order_total|floatformat:2 }} PKR</strong>
+                                                </th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- COD Instructions -->
+                            {% if order.payment_method == 'COD' %}
+                                <div class="alert alert-warning mt-3">
+                                    <i class="fas fa-truck"></i>
+                                    <strong>Cash on Delivery:</strong> Please keep the exact amount ready when our delivery person arrives. Our delivery person will collect the payment upon delivery.
+                                </div>
                             {% endif %}
-                          </td>
-                          <td class="text-center">{{ item.quantity }}</td>
-                          <td class="text-center">₨{{ item.product_price }} USD</td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <th colspan="2" class="text-right">Sub Total:</th>
-                          <th class="text-center">₨{{ subtotal }} USD</th>
-                        </tr>
-                        <tr>
-                          <th colspan="2" class="text-right">Tax:</th>
-                          <th class="text-center">₨{{ order.tax }} USD</th>
-                        </tr>
 
-                        <tr>
-                          <th colspan="2" class="text-right">Grand Total:</th>
-                          <th class="text-center">₨{{ order.order_total }} USD</th>
-                        </tr>
-                      </tfoot>
-                    </table>
-                  </div>
+                            <div class="invoice-footer mt25">
+                                <p class="text-center">Thank you for shopping with us!</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <!-- COD Instructions -->
-                {% if order.payment_method == 'COD' %}
-                  <div class="alert alert-warning mt-3">
-                    <i class="fas fa-truck"></i> 
-                    <strong>Cash on Delivery:</strong> Please keep the exact amount ready when our delivery person arrives. 
-                    Our delivery person will collect the payment upon delivery.
-                  </div>
-                {% endif %}
-                
-                <div class="invoice-footer mt25">
-                  <p class="text-center">Thank you for shopping with us!</p>
-                </div>
-              </div>
-              <!-- col-lg-12 end here -->
             </div>
-            <!-- End .row -->
-          </div>
         </div>
-        <!-- End .panel -->
-      </div>
-      <!-- col-lg-12 end here -->
     </div>
-  </div>
+</div>
+
 {% endblock %}
