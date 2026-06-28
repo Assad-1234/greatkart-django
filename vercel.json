@@ -1,23 +1,12 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "greatkart/wsgi.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "15mb",
-        "buildCommand": "pip install -r requirements.txt"
-      }
+      "use": "@vercel/python"
     }
   ],
   "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/"
-    },
-    {
-      "src": "/media/(.*)",
-      "dest": "/media/"
-    },
     {
       "src": "/(.*)",
       "dest": "greatkart/wsgi.py"
