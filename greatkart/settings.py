@@ -25,14 +25,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['.vercel.app', '.now.sh', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'assadahmad.pythonanywhere.com',
+    '127.0.0.1',
+    'localhost',
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -125,9 +130,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR /'static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
-    'greatkart/static'
+    BASE_DIR / 'static',
 ]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_URL = '/media/'
@@ -147,3 +152,28 @@ EMAIL_USE_SSL = config('EMAIL_USE_SSL', cast=bool)
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 ADMIN_EMAIL = config('ADMIN_EMAIL')
+
+JAZZMIN_SETTINGS = {
+    "site_title": "GreatKart",
+    "site_header": "GreatKart Admin",
+    "site_brand": "GreatKart",
+    "welcome_sign": "Welcome to GreatKart Dashboard",
+
+    "site_logo": "images/logo.png",
+
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index"},
+    ],
+
+    "show_sidebar": True,
+    "navigation_expanded": True,
+
+    "icons": {
+        "store.Product": "fas fa-box",
+        "category.Category": "fas fa-tags",
+        "orders.Order": "fas fa-shopping-cart",
+        "accounts.Account": "fas fa-users",
+    },
+
+    "changeform_format": "horizontal_tabs",
+}
