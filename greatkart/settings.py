@@ -11,8 +11,12 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import certifi
 from decouple import config
 import os
+
+
+# ... rest of your settings, including BASE_DIR, DATABASES, etc.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -88,10 +92,22 @@ AUTH_USER_MODEL = 'accounts.Account'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django_tidb',
+        'NAME': 'greatkart',
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': '4000',
+        'OPTIONS': {
+            'ssl_mode': 'VERIFY_IDENTITY',
+            'ssl': {'ca': certifi.where()},
+        },
     }
 }
 
